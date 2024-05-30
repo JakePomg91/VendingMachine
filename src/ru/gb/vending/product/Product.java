@@ -1,12 +1,10 @@
-public class Product {
-    String name;
-    double price;
+package ru.gb.vending.product;
 
-    /**
-     * Конструктор
-     * @param name Наименование продукта
-     * @param price Цена продукта
-     */
+public class Product {
+    private String name;
+    private double price;
+
+
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
@@ -22,6 +20,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "name: " + name + ", price: " + price + "p";
     }
 }
