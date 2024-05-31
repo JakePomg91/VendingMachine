@@ -7,21 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FamilyTree {
-    private List<Human> familyList = new ArrayList<>();
+    private List<Human> familyList;
 
     public FamilyTree() {
-        this.familyList = familyList;
+        familyList = new ArrayList<>();
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Family Tree: \n");
-        String name = "ds";
         for (Human human : familyList) {
-            if (!stringBuilder.toString().contains(human.toString())){
-            stringBuilder.append(human);
-            stringBuilder.append("\n");
+            if (!stringBuilder.toString().contains(human.toString())) {
+                stringBuilder.append(human);
+                stringBuilder.append("\n");
             }
         }
         return stringBuilder.toString();
@@ -36,5 +35,38 @@ public class FamilyTree {
                 human.getFather().addChildren(human);
             }
         }
+        if (human.getMother() != null) {
+            if (human.getMother().getChildren() == null) {
+                human.getMother().setChildren(Arrays.asList(human));
+            } else {
+                human.getMother().addChildren(human);
+            }
+        }
     }
+
+    public Human findByName(String name) {
+        for (Human human : familyList) {
+            if (human.getName().equals(name)) {
+                System.out.print(human);
+                System.out.println(childrenToString(human.getChildren()));
+                return human;
+            }
+        }
+        return null;
+    }
+
+    private String childrenToString(List<Human> children) {
+        if (children == null) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Human child : children) {
+            stringBuilder.append("\n");
+            stringBuilder.insert(stringBuilder.length(), "  |=>> ");
+            stringBuilder.append(child.toString());
+        }
+        return stringBuilder.toString();
+    }
+
 }

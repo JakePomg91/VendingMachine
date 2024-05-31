@@ -4,8 +4,16 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+/**
+ * @class_Human позволяющий создавать и управлять людьми в дереве. Имеет команды:
+ * @setChildren - Присвоение детей родителю
+ * @addChildren - Добавление детей родителю
+ * @getAge - Возвращает возраст
+ * @parentToString - Возвращает String с именЕМ родителя
+ * @childrenToString - Возвращает String с именАМИ детей
+ */
 public class Human {
-    private static int generation = 1;
+//    private static int generation = 1;
 
     private String name;
     private Gender gender;
@@ -56,7 +64,7 @@ public class Human {
     }
 
     public Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath) {
-        this(name, gender, dateOfBirth, dateOfDeath,null, null);
+        this(name, gender, dateOfBirth, dateOfDeath, null, null);
 
     }
 
@@ -113,26 +121,47 @@ public class Human {
     }
 
     private String childrenToString(List<Human> children) {
-        if (children == null) {
-            generation--;
-            if (generation < 1) generation = 1;
-            return null;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        StringBuilder space = new StringBuilder();
+        if (children == null) return null;
 
-        for (int i = 0; i < generation; i++) {
-            space.append("    ");
+        StringBuilder stringBuilder = new StringBuilder().append("(");
+        Iterator<Human> iterator = children.iterator();
+        while (iterator.hasNext()) {
+            Human child = iterator.next();
+            stringBuilder.append(child.name);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        space.append("|-> ");
-        for (Human child : children) {
-            stringBuilder.append("\n");
-            stringBuilder.insert(stringBuilder.length(), space);
-            if (child.children != null) generation++;
-            stringBuilder.append(child.toString());
-        }
-        return stringBuilder.toString();
+        return stringBuilder.append(")").toString();
+
     }
+
+    /**
+     * Более красивый вывод детей, но слишком много повторов
+     * @param children List< Humon > Список детей
+     * @return String в уже упорядоченном виде
+     */
+//    private String childrenToString(List<Human> children) {
+//        if (children == null) {
+//            generation--;
+//            if (generation < 1) generation = 1;
+//            return null;
+//        }
+//        StringBuilder stringBuilder = new StringBuilder();
+//        StringBuilder space = new StringBuilder();
+//
+//        for (int i = 0; i < generation; i++) {
+//            space.append("    ");
+//        }
+//        space.append("|-> ");
+//        for (Human child : children) {
+//            stringBuilder.append("\n");
+//            stringBuilder.insert(stringBuilder.length(), space);
+//            if (child.children != null) generation++;
+//            stringBuilder.append(child.toString());
+//        }
+//        return stringBuilder.toString();
+//    }
 
 
 }
