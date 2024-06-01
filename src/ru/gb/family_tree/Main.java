@@ -47,7 +47,6 @@ public class Main {
         System.out.println("Loaded:");
         System.out.println(loadedTree);
         loadedTree.findByName("Svetlana");
-
     }
 
     private static void save(FamilyTree tree, String filePath) {
