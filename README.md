@@ -1,3 +1,3 @@
 # Seminar's projects
- * ### Vending Machine
- * ### Family Tree
+ * ### Vending Machine -> src/ru/gb/vendig
+ * ### Family Tree -> src/ru/gb/family_tree
