@@ -1,5 +1,6 @@
 package ru.gb.family_tree.human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
@@ -12,7 +13,7 @@ import java.util.*;
  * @parentToString - Возвращает String с именЕМ родителя
  * @childrenToString - Возвращает String с именАМИ детей
  */
-public class Human {
+public class Human implements Serializable {
 //    private static int generation = 1;
 
     private String name;
@@ -34,16 +35,6 @@ public class Human {
         return children;
     }
 
-    public void setChildren(List<Human> children) {
-        this.children = children;
-    }
-
-    public void addChildren(Human children) {
-        List<Human> childrens = new ArrayList<>(this.children);
-        childrens.add(children);
-        this.children = childrens;
-    }
-
     public String getName() {
         return name;
     }
@@ -60,7 +51,7 @@ public class Human {
     }
 
     public Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath, Human father, Human mother) {
-        this(name, gender, dateOfBirth, dateOfDeath, null, father, mother);
+        this(name, gender, dateOfBirth, dateOfDeath, new ArrayList<>(), father, mother);
     }
 
     public Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath) {
@@ -82,8 +73,12 @@ public class Human {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Human)) {
+            return false;
+        }
         Human human = (Human) o;
         return Objects.equals(name, human.name) && Objects.equals(dateOfBirth, human.dateOfBirth) && Objects.equals(dateOfDeath, human.dateOfDeath);
     }
@@ -104,6 +99,18 @@ public class Human {
         return "name: " + name + ", gender: " + gender + ", age: " + getAge(dateOfBirth, dateOfDeath) + " | parents: (" + parentToString(father) + ", " + parentToString(mother) + ")" + ", children: " + childrenToString(children);
     }
 
+    public void setChildren(List<Human> children) {
+        this.children = children;
+    }
+
+    /**
+     * Из-за того, что я в конструктор передавал значние null (если не указывать ребенка при создании объекта) -
+     * List<> не мог обработать метод .add, так что пришлось заменять один список другим)
+     * <p> Сейчас поменял значение null на new ArrayList<>() и все заработало
+     */
+    public void addChildren(Human children) {
+        this.children.add(children);
+    }
 
     private int getAge(LocalDate dayOfBirth, LocalDate dayOfDeath) {
         String age;
@@ -115,13 +122,18 @@ public class Human {
         return Integer.parseInt(age.substring(1).split("Y")[0]);
     }
 
+    /**
+     * Этот метод нужен только для проверки на null, поскольку при создании нового экземпляра класса без указания родителя - конструктор присваивает родителям значение null.
+     * <p> И тут не получится решить проблему так же как с детьми {@link #addChildren}, ведь родители не находятся в списке, вот и был создан метод для проверки.
+     * <p> Единственное решение помимо моего которое я вижу - сделать как вы с методом getInfo и там обработать вообще все, и детей, и родителей
+     */
     private String parentToString(Human parent) {
         if (parent == null) return null;
         return parent.name;
     }
 
     private String childrenToString(List<Human> children) {
-        if (children == null) return null;
+        if (children.isEmpty()) return null;
 
         StringBuilder stringBuilder = new StringBuilder().append("(");
         Iterator<Human> iterator = children.iterator();
@@ -138,7 +150,7 @@ public class Human {
 
     /**
      * Более красивый вывод детей, но слишком много повторов
-     * @param children List< Humon > Список детей
+     * @param children List< Human > Список детей
      * @return String в уже упорядоченном виде
      */
 //    private String childrenToString(List<Human> children) {
