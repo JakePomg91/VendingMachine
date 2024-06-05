@@ -13,8 +13,7 @@ import java.util.*;
  * @parentToString - Возвращает String с именЕМ родителя
  * @childrenToString - Возвращает String с именАМИ детей
  */
-public class Human implements Serializable {
-//    private static int generation = 1;
+public class Human implements Serializable, Comparable<Human> {
 
     private String name;
     private Gender gender;
@@ -39,6 +38,13 @@ public class Human implements Serializable {
         return name;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public LocalDate getDateOfDeath() {
+        return dateOfDeath;
+    }
 
     private Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath, List<Human> children, Human father, Human mother) {
         this.name = name;
@@ -112,7 +118,7 @@ public class Human implements Serializable {
         this.children.add(children);
     }
 
-    private int getAge(LocalDate dayOfBirth, LocalDate dayOfDeath) {
+    public int getAge(LocalDate dayOfBirth, LocalDate dayOfDeath) {
         String age;
         if (dayOfDeath == null) {
             age = Period.between(dayOfBirth, LocalDate.now()).toString();
@@ -148,31 +154,9 @@ public class Human implements Serializable {
 
     }
 
-    /**
-     * Более красивый вывод детей, но слишком много повторов
-     * @param children List< Human > Список детей
-     * @return String в уже упорядоченном виде
-     */
-//    private String childrenToString(List<Human> children) {
-//        if (children == null) {
-//            generation--;
-//            if (generation < 1) generation = 1;
-//            return null;
-//        }
-//        StringBuilder stringBuilder = new StringBuilder();
-//        StringBuilder space = new StringBuilder();
-//
-//        for (int i = 0; i < generation; i++) {
-//            space.append("    ");
-//        }
-//        space.append("|-> ");
-//        for (Human child : children) {
-//            stringBuilder.append("\n");
-//            stringBuilder.insert(stringBuilder.length(), space);
-//            if (child.children != null) generation++;
-//            stringBuilder.append(child.toString());
-//        }
-//        return stringBuilder.toString();
-//    }
+    @Override
+    public int compareTo(Human o) {
+        return name.compareTo(o.name);
+    }
 
 }

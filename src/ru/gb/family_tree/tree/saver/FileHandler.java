@@ -1,4 +1,4 @@
-package ru.gb.family_tree;
+package ru.gb.family_tree.tree.saver;
 
 import java.io.*;
 
@@ -8,7 +8,6 @@ public class FileHandler implements Writable {
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path));
             objectOutputStream.writeObject(serializable);
-            objectOutputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -18,11 +17,10 @@ public class FileHandler implements Writable {
     public Object load(String filePath) {
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filePath));
-            Object result = objectInputStream.readObject();
-            objectInputStream.close();
-            return result;
+            return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 

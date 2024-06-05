@@ -1,24 +1,26 @@
 package ru.gb.family_tree.tree;
 
 import ru.gb.family_tree.human.Human;
+import ru.gb.family_tree.human.comparators.HumanComparatorByAge;
+import ru.gb.family_tree.human.comparators.HumanComparatorByChildrenCount;
+import ru.gb.family_tree.human.comparators.HumanComparatorByName;
+import ru.gb.family_tree.tree.iterators.HumanIterator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class FamilyTree implements Serializable {
-    private List<Human> familyList;
+public class FamilyTree implements Serializable, Iterable<Human> {
+    private List<Human> humanList;
 
     public FamilyTree() {
-        familyList = new ArrayList<>();
+        humanList = new ArrayList<>();
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Family Tree: \n");
-        for (Human human : familyList) {
+        for (Human human : humanList) {
             if (!stringBuilder.toString().contains(human.toString())) {
                 stringBuilder.append(human);
                 stringBuilder.append("\n");
@@ -27,8 +29,13 @@ public class FamilyTree implements Serializable {
         return stringBuilder.toString();
     }
 
+    @Override
+    public Iterator<Human> iterator() {
+        return new HumanIterator(humanList);
+    }
+
     public void addHuman(Human human) {
-        familyList.add(human);
+        humanList.add(human);
         if (human.getFather() != null) {
             if (human.getFather().getChildren() == null) {
                 human.getFather().setChildren(Arrays.asList(human));
@@ -46,7 +53,7 @@ public class FamilyTree implements Serializable {
     }
 
     public Human findByName(String name) {
-        for (Human human : familyList) {
+        for (Human human : humanList) {
             if (human.getName().equals(name)) {
                 System.out.print(human);
                 System.out.println(childrenToString(human.getChildren()));
@@ -70,5 +77,16 @@ public class FamilyTree implements Serializable {
         return stringBuilder.toString();
     }
 
+    public void sortByName() {
+//        Collections.sort(humanList);
+        humanList.sort(new HumanComparatorByName());
+    }
 
+    public void sortByAge() {
+        humanList.sort(new HumanComparatorByAge());
+    }
+
+    public void sortByChildrenCount() {
+        humanList.sort(new HumanComparatorByChildrenCount());
+    }
 }
