@@ -1,5 +1,7 @@
 package ru.gb.family_tree.human;
 
+import ru.gb.family_tree.tree.FamilyTreeGeneric;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,7 +15,7 @@ import java.util.*;
  * @parentToString - Возвращает String с именЕМ родителя
  * @childrenToString - Возвращает String с именАМИ детей
  */
-public class Human implements Serializable, Comparable<Human> {
+public class Human implements Serializable, FamilyTreeGeneric<Human> {
 
     private String name;
     private Gender gender;
@@ -44,6 +46,29 @@ public class Human implements Serializable, Comparable<Human> {
 
     public LocalDate getDateOfDeath() {
         return dateOfDeath;
+    }
+
+    public int getAge(LocalDate dayOfBirth, LocalDate dayOfDeath) {
+        String age;
+        if (dayOfDeath == null) {
+            age = Period.between(dayOfBirth, LocalDate.now()).toString();
+        } else {
+            age = Period.between(dayOfBirth, dayOfDeath).toString();
+        }
+        return Integer.parseInt(age.substring(1).split("Y")[0]);
+    }
+
+    public void setChildren(List<Human> children) {
+        this.children = children;
+    }
+
+    /**
+     * Из-за того, что я в конструктор передавал значние null (если не указывать ребенка при создании объекта) -
+     * List<> не мог обработать метод .add, так что пришлось заменять один список другим)
+     * <p> Сейчас поменял значение null на new ArrayList<>() и все заработало
+     */
+    public void addChildren(Human children) {
+        this.children.add(children);
     }
 
     private Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath, List<Human> children, Human father, Human mother) {
@@ -103,29 +128,6 @@ public class Human implements Serializable, Comparable<Human> {
     @Override
     public String toString() {
         return "name: " + name + ", gender: " + gender + ", age: " + getAge(dateOfBirth, dateOfDeath) + " | parents: (" + parentToString(father) + ", " + parentToString(mother) + ")" + ", children: " + childrenToString(children);
-    }
-
-    public void setChildren(List<Human> children) {
-        this.children = children;
-    }
-
-    /**
-     * Из-за того, что я в конструктор передавал значние null (если не указывать ребенка при создании объекта) -
-     * List<> не мог обработать метод .add, так что пришлось заменять один список другим)
-     * <p> Сейчас поменял значение null на new ArrayList<>() и все заработало
-     */
-    public void addChildren(Human children) {
-        this.children.add(children);
-    }
-
-    public int getAge(LocalDate dayOfBirth, LocalDate dayOfDeath) {
-        String age;
-        if (dayOfDeath == null) {
-            age = Period.between(dayOfBirth, LocalDate.now()).toString();
-        } else {
-            age = Period.between(dayOfBirth, dayOfDeath).toString();
-        }
-        return Integer.parseInt(age.substring(1).split("Y")[0]);
     }
 
     /**

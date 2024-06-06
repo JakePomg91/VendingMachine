@@ -1,16 +1,14 @@
 package ru.gb.family_tree.tree;
 
-import ru.gb.family_tree.human.Human;
 import ru.gb.family_tree.human.comparators.HumanComparatorByAge;
 import ru.gb.family_tree.human.comparators.HumanComparatorByChildrenCount;
-import ru.gb.family_tree.human.comparators.HumanComparatorByName;
-import ru.gb.family_tree.tree.iterators.HumanIterator;
+import ru.gb.family_tree.tree.iterators.EIterator;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class FamilyTree implements Serializable, Iterable<Human> {
-    private List<Human> humanList;
+public class FamilyTree<E extends FamilyTreeGeneric<E>> implements Serializable, Iterable<E> {
+    private List<E> humanList;
 
     public FamilyTree() {
         humanList = new ArrayList<>();
@@ -20,9 +18,9 @@ public class FamilyTree implements Serializable, Iterable<Human> {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Family Tree: \n");
-        for (Human human : humanList) {
-            if (!stringBuilder.toString().contains(human.toString())) {
-                stringBuilder.append(human);
+        for (E e : humanList) {
+            if (!stringBuilder.toString().contains(e.toString())) {
+                stringBuilder.append(e);
                 stringBuilder.append("\n");
             }
         }
@@ -30,63 +28,63 @@ public class FamilyTree implements Serializable, Iterable<Human> {
     }
 
     @Override
-    public Iterator<Human> iterator() {
-        return new HumanIterator(humanList);
+    public Iterator<E> iterator() {
+        return new EIterator<E>(humanList);
     }
 
-    public void addHuman(Human human) {
-        humanList.add(human);
-        if (human.getFather() != null) {
-            if (human.getFather().getChildren() == null) {
-                human.getFather().setChildren(Arrays.asList(human));
+    public void addHuman(E e) {
+        humanList.add(e);
+        if (e.getFather() != null) {
+            if (e.getFather().getChildren() == null) {
+                e.getFather().setChildren(Arrays.asList(e));
             } else {
-                human.getFather().addChildren(human);
+                e.getFather().addChildren(e);
             }
         }
-        if (human.getMother() != null) {
-            if (human.getMother().getChildren() == null) {
-                human.getMother().setChildren(Arrays.asList(human));
+        if (e.getMother() != null) {
+            if (e.getMother().getChildren() == null) {
+                e.getMother().setChildren(Arrays.asList(e));
             } else {
-                human.getMother().addChildren(human);
+                e.getMother().addChildren(e);
             }
         }
     }
 
-    public Human findByName(String name) {
-        for (Human human : humanList) {
-            if (human.getName().equals(name)) {
-                System.out.print(human);
-                System.out.println(childrenToString(human.getChildren()));
-                return human;
+    public E findByName(String name) {
+        for (E e : humanList) {
+            if (e.getName().equals(name)) {
+                System.out.print(e);
+                System.out.println(childrenToString(e.getChildren()));
+                return e;
             }
         }
         return null;
     }
 
-    private String childrenToString(List<Human> children) {
+    private String childrenToString(List<E> children) {
         if (children == null) {
             return null;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (Human child : children) {
+        for (E eChild : children) {
             stringBuilder.append("\n");
             stringBuilder.insert(stringBuilder.length(), "  |=>> ");
-            stringBuilder.append(child.toString());
+            stringBuilder.append(eChild.toString());
         }
         return stringBuilder.toString();
     }
 
     public void sortByName() {
-//        Collections.sort(humanList);
-        humanList.sort(new HumanComparatorByName());
+        Collections.sort(humanList);
+//        humanList.sort(new HumanComparatorByName<>());
     }
 
     public void sortByAge() {
-        humanList.sort(new HumanComparatorByAge());
+        humanList.sort(new HumanComparatorByAge<>());
     }
 
     public void sortByChildrenCount() {
-        humanList.sort(new HumanComparatorByChildrenCount());
+        humanList.sort(new HumanComparatorByChildrenCount<>());
     }
 }
