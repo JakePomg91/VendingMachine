@@ -1,4 +1,4 @@
-package ru.gb.family_tree.tree.saver;
+package ru.gb.family_tree.model.family_tree.saver;
 
 import java.io.Serializable;
 

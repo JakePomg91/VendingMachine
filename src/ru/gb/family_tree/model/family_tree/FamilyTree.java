@@ -1,8 +1,10 @@
-package ru.gb.family_tree.tree;
+package ru.gb.family_tree.model.family_tree;
 
-import ru.gb.family_tree.human.comparators.HumanComparatorByAge;
-import ru.gb.family_tree.human.comparators.HumanComparatorByChildrenCount;
-import ru.gb.family_tree.tree.iterators.EIterator;
+import ru.gb.family_tree.model.human.comparators.HumanComparatorByAge;
+import ru.gb.family_tree.model.human.comparators.HumanComparatorByChildrenCount;
+import ru.gb.family_tree.model.family_tree.iterators.EIterator;
+import ru.gb.family_tree.model.human.comparators.HumanComparatorByID;
+import ru.gb.family_tree.model.human.comparators.HumanComparatorByName;
 
 import java.io.Serializable;
 import java.util.*;
@@ -50,12 +52,25 @@ public class FamilyTree<E extends FamilyTreeGeneric<E>> implements Serializable,
         }
     }
 
-    public E findByName(String name) {
+//    public E findByName(String name) {
+//        for (E e : humanList) {
+//            if (e.getName().equals(name)) {
+//                System.out.print(e);
+//                System.out.println(childrenToString(e.getChildren()));
+//                return e;
+//            }
+//        }
+//        return null;
+//    }
+
+    public String findByName(String name) {
+        StringBuilder result = new StringBuilder();
         for (E e : humanList) {
             if (e.getName().equals(name)) {
-                System.out.print(e);
-                System.out.println(childrenToString(e.getChildren()));
-                return e;
+                result.append(e);
+                result.append(childrenToString(e.getChildren()));
+                result.append("\n");
+                return result.toString();
             }
         }
         return null;
@@ -75,9 +90,12 @@ public class FamilyTree<E extends FamilyTreeGeneric<E>> implements Serializable,
         return stringBuilder.toString();
     }
 
+    public void sortByID() {
+        humanList.sort(new HumanComparatorByID<>());
+    }
+
     public void sortByName() {
-        Collections.sort(humanList);
-//        humanList.sort(new HumanComparatorByName<>());
+        humanList.sort(new HumanComparatorByName<>());
     }
 
     public void sortByAge() {
@@ -86,5 +104,14 @@ public class FamilyTree<E extends FamilyTreeGeneric<E>> implements Serializable,
 
     public void sortByChildrenCount() {
         humanList.sort(new HumanComparatorByChildrenCount<>());
+    }
+
+    public E findByID(int id) {
+        for (E e : humanList) {
+            if (e.getID() == id) {
+                return e;
+            }
+        }
+        return null;
     }
 }

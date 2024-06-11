@@ -1,10 +1,10 @@
-package ru.gb.family_tree.tree;
+package ru.gb.family_tree.model.family_tree;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface FamilyTreeGeneric<E> extends Comparable<E> {
+    int getID();
     String getName();
     E getFather();
     E getMother();

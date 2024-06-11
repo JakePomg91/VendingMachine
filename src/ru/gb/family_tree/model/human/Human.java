@@ -1,6 +1,6 @@
-package ru.gb.family_tree.human;
+package ru.gb.family_tree.model.human;
 
-import ru.gb.family_tree.tree.FamilyTreeGeneric;
+import ru.gb.family_tree.model.family_tree.FamilyTreeGeneric;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -17,12 +17,22 @@ import java.util.*;
  */
 public class Human implements Serializable, FamilyTreeGeneric<Human> {
 
+    private static int humanCounter;
+    private int id;
     private String name;
     private Gender gender;
     private LocalDate dateOfBirth, dateOfDeath;
     private List<Human> children;
     private Human father, mother;
 
+    static {
+        humanCounter = 0;
+    }
+
+
+    public int getID() {
+        return id;
+    }
 
     public Human getFather() {
         return father;
@@ -72,6 +82,7 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
     }
 
     private Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath, List<Human> children, Human father, Human mother) {
+        this.id = ++humanCounter;
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
@@ -92,6 +103,10 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
 
     public Human(String name, Gender gender, LocalDate dateOfBirth, Human father, Human mother) {
         this(name, gender, dateOfBirth, null, father, mother);
+    }
+
+    public Human(String name, Gender gender, LocalDate dateOfBirth, Human parent) {
+        this(name, gender, dateOfBirth, null, parent, null);
     }
 
     public Human(String name, Gender gender, LocalDate dateOfBirth) {
@@ -121,13 +136,13 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         for (int code : codes) {
             hashNumPart += code;
         }
-        String hashStringPart = String.valueOf(hashNumPart + (long) new Random().nextInt(2, 100) * dateOfBirth.getDayOfYear());
+        String hashStringPart = String.valueOf(hashNumPart + (long) new Random().nextInt(2, 100) * dateOfBirth.getDayOfYear() + id);
         return Objects.hash(hashStringPart, getAge(dateOfBirth, dateOfDeath));
     }
 
     @Override
     public String toString() {
-        return "name: " + name + ", gender: " + gender + ", age: " + getAge(dateOfBirth, dateOfDeath) + " | parents: (" + parentToString(father) + ", " + parentToString(mother) + ")" + ", children: " + childrenToString(children);
+        return "ID: " + id + ". name: " + name + ", gender: " + gender + ", age: " + getAge(dateOfBirth, dateOfDeath) + " | parents: (" + parentToString(father) + ", " + parentToString(mother) + ")" + ", children: " + childrenToString(children);
     }
 
     /**
@@ -158,7 +173,7 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
 
     @Override
     public int compareTo(Human o) {
-        return name.compareTo(o.name);
+        return Integer.compare(id, o.id);
     }
 
 }

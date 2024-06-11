@@ -2,68 +2,25 @@ package ru.gb.family_tree;
 
 import java.time.LocalDate;
 
-import ru.gb.family_tree.human.Gender;
-import ru.gb.family_tree.human.Human;
-import ru.gb.family_tree.tree.FamilyTree;
-import ru.gb.family_tree.tree.saver.FileHandler;
+import ru.gb.family_tree.model.human.Gender;
+import ru.gb.family_tree.model.human.Human;
+import ru.gb.family_tree.model.family_tree.FamilyTree;
+import ru.gb.family_tree.model.service.Service;
+import ru.gb.family_tree.model.family_tree.saver.FileHandler;
+import ru.gb.family_tree.view.ConsoleUI;
+import ru.gb.family_tree.view.View;
 
 public class Main {
     /**
      *
      */
     public static void main(String[] args) {
-        String filePath = "src/ru/gb/family_tree/tree/saver/tree_save.txt";
+        String filePath = "src/ru/gb/family_tree/model/family_tree/saver/tree_save.txt";
 
-        FamilyTree<Human> familyTree = new FamilyTree<>();
-        Human human1_1 = new Human("Anatoliy", Gender.Male, LocalDate.of(1984, 12, 4), LocalDate.of(2008, 11, 21));
-        Human human1_2 = new Human("Svetlana", Gender.Female, LocalDate.of(1991, 5, 24));
-
-        Human human2_1 = new Human("Sergey", Gender.Male, LocalDate.of(1991, 9, 30), human1_1, human1_2);
-        Human human2_2 = new Human("Maria", Gender.Female, LocalDate.of(1980, 8, 15), human1_1, human1_2);
-        Human human2_3 = new Human("Alexandr", Gender.Male, LocalDate.of(2009, 1, 14), null, null);
-
-        Human human3_1 = new Human("Viktor", Gender.Male, LocalDate.of(1999, 5, 10), human2_3, human2_1);
-        Human human3_2 = new Human("Valeriy", Gender.Male, LocalDate.of(2001, 7, 19), human1_1, human1_2);
+        ConsoleUI view = new ConsoleUI();
+        view.start();
 
 
-        familyTree.addHuman(human1_1);
-        familyTree.addHuman(human1_2);
-        familyTree.addHuman(human2_1);
-        familyTree.addHuman(human2_2);
-        familyTree.addHuman(human2_3);
-        familyTree.addHuman(human3_1);
-        familyTree.addHuman(human3_2);
-
-
-
-        save(familyTree, filePath);
-
-        FamilyTree<Human> familyTree2 = load(filePath);
-
-        System.out.println("\n Loaded:");
-        System.out.println(familyTree2);
-
-        System.out.println("\n Searching by name:");
-        familyTree2.findByName("Svetlana");
-
-
-
-        System.out.println("\n Iterator working:");
-        for (Object human : familyTree2) {
-            System.out.println(human);
-        }
-
-        familyTree2.sortByName();
-        System.out.println("\n Sorted by name:");
-        System.out.println(familyTree2);
-
-        familyTree2.sortByAge();
-        System.out.println("\n Sorted by age:");
-        System.out.println(familyTree2);
-
-        familyTree2.sortByChildrenCount();
-        System.out.println("\n Sorted by children count");
-        System.out.println(familyTree2);
     }
 
     private static void save(FamilyTree tree, String filePath) {
