@@ -45,4 +45,12 @@ public class Presenter {
     public String findByName(String name) {
         return service.findByName(name);
     }
+
+    public void saveTree() {
+        service.saveTree();
+    }
+
+    public void loadTree() {
+        service.loadTree();
+    }
 }

@@ -1,5 +1,6 @@
 package ru.gb.family_tree.model.family_tree;
 
+import ru.gb.family_tree.model.family_tree.saver.FileHandler;
 import ru.gb.family_tree.model.human.comparators.HumanComparatorByAge;
 import ru.gb.family_tree.model.human.comparators.HumanComparatorByChildrenCount;
 import ru.gb.family_tree.model.family_tree.iterators.EIterator;
@@ -114,4 +115,9 @@ public class FamilyTree<E extends FamilyTreeGeneric<E>> implements Serializable,
         }
         return null;
     }
+
+    public int getSize() {
+        return humanList.size();
+    }
+
 }

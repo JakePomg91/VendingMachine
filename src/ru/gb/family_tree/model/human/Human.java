@@ -15,7 +15,7 @@ import java.util.*;
  * @parentToString - Возвращает String с именЕМ родителя
  * @childrenToString - Возвращает String с именАМИ детей
  */
-public class Human implements Serializable, FamilyTreeGeneric<Human> {
+public class Human implements Serializable, FamilyTreeGeneric<Human>, Creature {
 
     private static int humanCounter;
     private int id;
@@ -29,6 +29,7 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         humanCounter = 0;
     }
 
+// getters, setters
 
     public int getID() {
         return id;
@@ -68,6 +69,11 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         return Integer.parseInt(age.substring(1).split("Y")[0]);
     }
 
+    @Override
+    public void setHumanCounter(int humanCounter) {
+        Human.humanCounter = humanCounter;
+    }
+
     public void setChildren(List<Human> children) {
         this.children = children;
     }
@@ -81,6 +87,7 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         this.children.add(children);
     }
 
+// constructions
     private Human(String name, Gender gender, LocalDate dateOfBirth, LocalDate dateOfDeath, List<Human> children, Human father, Human mother) {
         this.id = ++humanCounter;
         this.name = name;
@@ -145,6 +152,11 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         return "ID: " + id + ". name: " + name + ", gender: " + gender + ", age: " + getAge(dateOfBirth, dateOfDeath) + " | parents: (" + parentToString(father) + ", " + parentToString(mother) + ")" + ", children: " + childrenToString(children);
     }
 
+    @Override
+    public int compareTo(Human o) {
+        return Integer.compare(id, o.id);
+    }
+
     /**
      * Этот метод нужен только для проверки на null, поскольку при создании нового экземпляра класса без указания родителя - конструктор присваивает родителям значение null.
      * <p> И тут не получится решить проблему так же как с детьми {@link #addChildren}, ведь родители не находятся в списке, вот и был создан метод для проверки.
@@ -170,10 +182,4 @@ public class Human implements Serializable, FamilyTreeGeneric<Human> {
         return stringBuilder.append(")").toString();
 
     }
-
-    @Override
-    public int compareTo(Human o) {
-        return Integer.compare(id, o.id);
-    }
-
 }

@@ -11,26 +11,12 @@ import ru.gb.family_tree.view.ConsoleUI;
 import ru.gb.family_tree.view.View;
 
 public class Main {
-    /**
-     *
-     */
+
     public static void main(String[] args) {
-        String filePath = "src/ru/gb/family_tree/model/family_tree/saver/tree_save.txt";
 
         ConsoleUI view = new ConsoleUI();
         view.start();
 
-
-    }
-
-    private static void save(FamilyTree tree, String filePath) {
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.save(tree, filePath);
-    }
-
-    private static FamilyTree load(String filePath) {
-        FileHandler fileHandler = new FileHandler();
-        return (FamilyTree) fileHandler.load(filePath);
     }
 
 }

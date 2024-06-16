@@ -12,11 +12,13 @@ public class MainMenu {
         commands = new ArrayList<>();
         commands.add(new AddHuman(consoleUI));
         commands.add(new FindByName(consoleUI));
+        commands.add(new GetFamilyTreeInfo(consoleUI));
         commands.add(new SortByID(consoleUI));
         commands.add(new SortByName(consoleUI));
         commands.add(new SortByAge(consoleUI));
         commands.add(new SortByChildrenCount(consoleUI));
-        commands.add(new GetFamilyTreeInfo(consoleUI));
+        commands.add(new SaveTree(consoleUI));
+        commands.add(new LoadTree(consoleUI));
         commands.add(new Finish(consoleUI));
     }
 

@@ -2,14 +2,22 @@ package ru.gb.family_tree.model.service;
 
 import ru.gb.family_tree.model.family_tree.FamilyTree;
 import ru.gb.family_tree.model.family_tree.FamilyTreeGeneric;
+import ru.gb.family_tree.model.family_tree.saver.FileHandler;
+import ru.gb.family_tree.model.human.Creature;
+import ru.gb.family_tree.model.human.Human;
 
-public class Service<E> {
+import java.io.Serializable;
+import java.util.List;
+
+public class Service<E extends Creature> {
     private FamilyTree familyTree;
     private E human;
+    String filePath;
 
 
     public Service() {
         familyTree = new FamilyTree<>();
+        filePath = "src/ru/gb/family_tree/model/family_tree/saver/tree_save.txt";
     }
 
     public void addHuman(E e) {
@@ -49,8 +57,23 @@ public class Service<E> {
         return (E) familyTree.findByID(id);
     }
 
-    public FamilyTree getTree(){
+    public FamilyTree getTree() {
         return familyTree;
+    }
+
+    public void saveTree() {
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.save(familyTree, filePath);
+    }
+
+    public void loadTree() {
+        FileHandler fileHandler = new FileHandler();
+        familyTree = (FamilyTree) fileHandler.load(filePath);
+        // TODO попытка решить проблему с ID
+//        if (familyTree != null && human != null) {
+//            human.setHumanCounter(familyTree.getSize());
+//            System.out.println("ЗАШЁЛ В if");
+//        }
     }
 
 }
